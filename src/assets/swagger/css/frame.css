@@ -1,0 +1,9 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+html.dark-mode body {
+    background: #1c2022;
+}

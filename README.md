@@ -12,13 +12,9 @@ code on request and shows it with [Swagger UI](https://github.com/swagger-api/sw
 
 ## Installation
 
-Projects whose `vendor/` is copied rather than managed by composer:
-
 ```bash
-bash bin/install.sh <project-root>
+composer require portalium/yii2-openapi
 ```
-
-Then:
 
 1. `web/config/main.php` → `'modules'`:
    ```php

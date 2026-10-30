@@ -1,11 +1,11 @@
 <?php
 
-namespace portalium\developer\tests\components;
+namespace portalium\openapi\tests\components;
 
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
-use portalium\developer\components\SpecBuilder;
-use portalium\developer\tests\fixtures\demo\Module as DemoModule;
+use portalium\openapi\components\SpecBuilder;
+use portalium\openapi\tests\fixtures\demo\Module as DemoModule;
 use tests\support\AppTestCase;
 
 class SpecBuilderTest extends AppTestCase
@@ -162,8 +162,8 @@ class SpecBuilderTest extends AppTestCase
 
     public function testCachedInternalDocumentDoesNotLeakIntoThePublicOne(): void
     {
-        \Yii::$app->set('developerTestCache', new \yii\caching\ArrayCache());
-        $builder = new SpecBuilder(['modules' => ['demo' => DemoModule::class], 'cache' => 'developerTestCache', 'serverUrl' => 'https://x/api']);
+        \Yii::$app->set('openapiTestCache', new \yii\caching\ArrayCache());
+        $builder = new SpecBuilder(['modules' => ['demo' => DemoModule::class], 'cache' => 'openapiTestCache', 'serverUrl' => 'https://x/api']);
 
         $internal = $builder->build(true);
         $public = $builder->build(false);

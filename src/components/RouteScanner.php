@@ -1,6 +1,6 @@
 <?php
 
-namespace portalium\developer\components;
+namespace portalium\openapi\components;
 
 use ReflectionClass;
 use ReflectionMethod;

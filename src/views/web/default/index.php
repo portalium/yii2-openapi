@@ -1,7 +1,7 @@
 <?php
 
-use portalium\developer\bundles\DeveloperAsset;
-use portalium\developer\Module;
+use portalium\openapi\bundles\OpenApiAsset;
+use portalium\openapi\Module;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -11,10 +11,10 @@ use yii\helpers\Url;
 $this->title = Module::t('API Reference');
 $this->params['breadcrumbs'][] = $this->title;
 
-DeveloperAsset::register($this);
+OpenApiAsset::register($this);
 ?>
-<div class="developer">
-    <div class="developer-bar">
+<div class="openapi">
+    <div class="openapi-bar">
         <span>
             <?= $internal
                 ? Module::t('Internal operations are shown too; customers do not see them.')
@@ -23,7 +23,7 @@ DeveloperAsset::register($this);
         <?= Html::a(Module::t('Download OpenAPI (JSON)'), ['spec', 'download' => 1], ['class' => 'btn btn-sm btn-info']) ?>
     </div>
     <?= Html::tag('iframe', '', [
-        'class' => 'developer-frame',
+        'class' => 'openapi-frame',
         'src' => Url::to(['frame']),
         'title' => $this->title,
     ]) ?>

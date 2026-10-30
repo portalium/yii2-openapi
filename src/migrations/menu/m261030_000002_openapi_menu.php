@@ -3,10 +3,10 @@
 use portalium\db\Migration;
 use yii\db\Query;
 
-class m261030_000002_developer_menu extends Migration
+class m261030_000002_openapi_menu extends Migration
 {
     private const MAIN_MENU = 'web-main-menu';
-    private const SLUG = 'developer';
+    private const SLUG = 'openapi';
 
     public function safeUp()
     {
@@ -30,16 +30,16 @@ class m261030_000002_developer_menu extends Migration
                 'icon' => 'fa fa-code', 'color' => '', 'iconSize' => '', 'display' => '1', 'childDisplay' => '', 'placement' => '1',
             ]),
             'data' => json_encode(['data' => [
-                'module' => 'developer',
+                'module' => 'openapi',
                 'routeType' => 'action',
-                'route' => '/developer/default/index',
+                'route' => '/openapi/default/index',
                 'model' => '',
                 'menuRoute' => null,
                 'menuType' => null,
             ]], JSON_UNESCAPED_SLASHES),
             'sort' => $sort === false || $sort === null ? 0 : (int) $sort,
             'id_menu' => $menu['id_menu'],
-            'name_auth' => 'developerWebDefaultIndex',
+            'name_auth' => 'openapiWebDefaultIndex',
             'id_user' => $menu['id_user'],
             'date_create' => date('Y-m-d H:i:s'),
             'date_update' => date('Y-m-d H:i:s'),

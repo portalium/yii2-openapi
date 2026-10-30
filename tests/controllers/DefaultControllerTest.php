@@ -1,10 +1,10 @@
 <?php
 
-namespace portalium\developer\tests\controllers;
+namespace portalium\openapi\tests\controllers;
 
-use portalium\developer\controllers\web\DefaultController;
-use portalium\developer\Module;
-use portalium\developer\tests\fixtures\demo\Module as DemoModule;
+use portalium\openapi\controllers\web\DefaultController;
+use portalium\openapi\Module;
+use portalium\openapi\tests\fixtures\demo\Module as DemoModule;
 use tests\support\AppTestCase;
 use tests\support\Fixture\WorkspaceFixture as F;
 use Yii;
@@ -18,8 +18,8 @@ class DefaultControllerTest extends AppTestCase
 {
     private function controller(): DefaultController
     {
-        $module = new Module('developer', Yii::$app, ['modules' => ['demo' => DemoModule::class], 'serverUrl' => 'https://example.test/api']);
-        Yii::$app->setModule('developer', $module);
+        $module = new Module('openapi', Yii::$app, ['modules' => ['demo' => DemoModule::class], 'serverUrl' => 'https://example.test/api']);
+        Yii::$app->setModule('openapi', $module);
         Yii::$app->controller = new DefaultController('default', $module);
         return Yii::$app->controller;
     }
@@ -70,7 +70,7 @@ class DefaultControllerTest extends AppTestCase
         $html = $this->controller()->actionFrame();
 
         $this->assertStringContainsString('swagger-ui-bundle.js', $html);
-        $this->assertStringContainsString('window.DeveloperConfig', $html);
+        $this->assertStringContainsString('window.OpenApiConfig', $html);
         $this->assertStringNotContainsString('bootstrap', $html);
     }
 

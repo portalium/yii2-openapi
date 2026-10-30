@@ -1,6 +1,6 @@
 <?php
 
-namespace portalium\developer\tests\fixtures\demo\controllers\api;
+namespace portalium\openapi\tests\fixtures\demo\controllers\api;
 
 use portalium\rest\ActiveController;
 

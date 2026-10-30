@@ -1,14 +1,14 @@
 <?php
 
-namespace portalium\developer\components;
+namespace portalium\openapi\components;
 
-use portalium\developer\attributes\Body;
-use portalium\developer\attributes\Hidden;
-use portalium\developer\attributes\Operation;
-use portalium\developer\attributes\Param;
-use portalium\developer\attributes\Permission;
-use portalium\developer\attributes\Response;
-use portalium\developer\attributes\Tag;
+use portalium\openapi\attributes\Body;
+use portalium\openapi\attributes\Hidden;
+use portalium\openapi\attributes\Operation;
+use portalium\openapi\attributes\Param;
+use portalium\openapi\attributes\Permission;
+use portalium\openapi\attributes\Response;
+use portalium\openapi\attributes\Tag;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -19,7 +19,7 @@ use yii\helpers\Inflector;
 
 /**
  * Builds the OpenAPI 3.0.3 document of the API application from its code (see docs: RouteScanner for routes,
- * SchemaFactory for schemas, the attributes in portalium\developer\attributes for what code cannot tell).
+ * SchemaFactory for schemas, the attributes in portalium\openapi\attributes for what code cannot tell).
  *
  * Operations are internal unless marked public (Operation::PUBLIC); build(false) leaves internal operations and
  * the schemas only they use out of the document entirely.

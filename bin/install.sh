@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Installs or updates portalium/yii2-developer in a Portalium project whose vendor/ is copied rather than managed by
+# Installs or updates portalium/yii2-openapi in a Portalium project whose vendor/ is copied rather than managed by
 # composer. Projects that use composer do not need this script (see README.md, "Installation").
 #
 # Usage: bash bin/install.sh <project-root>
 #
-# 1. Copies the package to <project>/vendor/portalium/yii2-developer (without .git and bin; files deleted here are
+# 1. Copies the package to <project>/vendor/portalium/yii2-openapi (without .git and bin; files deleted here are
 #    deleted there too).
-# 2. Adds the portalium\developer\ (src/) and portalium\developer\tests\ (tests/) prefixes to
+# 2. Adds the portalium\openapi\ (src/) and portalium\openapi\tests\ (tests/) prefixes to
 #    vendor/composer/autoload_psr4.php and autoload_static.php (left alone if present). composer dump-autoload is not
 #    run, because it would rebuild the autoloader from a vendor/ composer does not know.
 # Safe to run again. Configuration and the migration are manual; the steps are printed at the end.
@@ -19,7 +19,7 @@ if [[ -z "$PROJECT" || ! -f "$PROJECT/vendor/composer/autoload_static.php" ]]; t
 fi
 PROJECT="$(cd "$PROJECT" && pwd)"
 PACKAGE="$(cd "$(dirname "$0")/.." && pwd)"
-TARGET="$PROJECT/vendor/portalium/yii2-developer"
+TARGET="$PROJECT/vendor/portalium/yii2-openapi"
 
 mkdir -p "$TARGET"
 rsync -a --delete --exclude='.git/' --exclude='/bin/' --exclude='.DS_Store' "$PACKAGE/" "$TARGET/"
@@ -31,8 +31,8 @@ import sys, pathlib
 composer = pathlib.Path(sys.argv[1])
 # (prefix as written in the PHP array, i.e. with doubled backslashes; directory under vendor/)
 entries = [
-    ("portalium\\\\developer\\\\tests\\\\", "/portalium/yii2-developer/tests"),
-    ("portalium\\\\developer\\\\", "/portalium/yii2-developer/src"),
+    ("portalium\\\\openapi\\\\tests\\\\", "/portalium/yii2-openapi/tests"),
+    ("portalium\\\\openapi\\\\", "/portalium/yii2-openapi/src"),
 ]
 
 def length(prefix):
@@ -79,9 +79,9 @@ cat <<EOF
 
 Remaining steps (first installation only):
   1. web/config/main.php → 'modules':
-       'developer' => ['class' => 'portalium\\developer\\Module', 'title' => 'My API'],
+       'openapi' => ['class' => 'portalium\\openapi\\Module', 'title' => 'My API'],
   2. Migrations (where PHP runs, e.g. inside the PHP container):
-       php portalium migrate --migrationPath=@vendor/portalium/yii2-developer/src/migrations --interactive=0
-       php portalium migrate --migrationPath=@vendor/portalium/yii2-developer/src/migrations/menu --interactive=0
+       php portalium migrate --migrationPath=@vendor/portalium/yii2-openapi/src/migrations --interactive=0
+       php portalium migrate --migrationPath=@vendor/portalium/yii2-openapi/src/migrations/menu --interactive=0
   3. Mark operations public: see $TARGET/README.md
 EOF

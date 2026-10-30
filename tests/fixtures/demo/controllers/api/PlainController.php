@@ -1,9 +1,9 @@
 <?php
 
-namespace portalium\developer\tests\fixtures\demo\controllers\api;
+namespace portalium\openapi\tests\fixtures\demo\controllers\api;
 
-use portalium\developer\attributes as Doc;
-use portalium\developer\tests\fixtures\demo\models\DemoForm;
+use portalium\openapi\attributes as Doc;
+use portalium\openapi\tests\fixtures\demo\models\DemoForm;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\Controller;
 

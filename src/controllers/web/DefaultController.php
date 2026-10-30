@@ -1,8 +1,8 @@
 <?php
 
-namespace portalium\developer\controllers\web;
+namespace portalium\openapi\controllers\web;
 
-use portalium\developer\Module;
+use portalium\openapi\Module;
 use portalium\web\Controller;
 use Yii;
 use yii\web\ForbiddenHttpException;
@@ -32,7 +32,7 @@ class DefaultController extends Controller
 
     /**
      * The OpenAPI document for the current user: public operations, plus internal ones with
-     * developerWebDefaultInternal. ?download=1 sends it as openapi.json.
+     * openapiWebDefaultInternal. ?download=1 sends it as openapi.json.
      */
     public function actionSpec($download = null)
     {

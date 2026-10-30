@@ -1,6 +1,6 @@
 <?php
 
-namespace portalium\developer\attributes;
+namespace portalium\openapi\attributes;
 
 use Attribute;
 

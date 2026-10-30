@@ -1,13 +1,13 @@
 <?php
 
-use portalium\developer\bundles\SwaggerAsset;
+use portalium\openapi\bundles\SwaggerAsset;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 
 SwaggerAsset::register($this);
-$this->registerJs('window.DeveloperConfig = ' . json_encode([
+$this->registerJs('window.OpenApiConfig = ' . json_encode([
     'url' => Url::to(['spec']),
     'options' => $this->context->module->swagger,
 ], JSON_UNESCAPED_SLASHES) . ';', \yii\web\View::POS_HEAD);
@@ -23,7 +23,7 @@ $this->registerJs('window.DeveloperConfig = ' . json_encode([
 </head>
 <body>
 <?php $this->beginBody() ?>
-<div id="developer-reference"></div>
+<div id="openapi-reference"></div>
 <?php $this->endBody() ?>
 </body>
 </html>

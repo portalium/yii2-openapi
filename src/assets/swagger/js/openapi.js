@@ -6,7 +6,7 @@
 (function () {
     'use strict';
 
-    var config = window.DeveloperConfig;
+    var config = window.OpenApiConfig;
     if (!config || !window.SwaggerUIBundle) {
         return;
     }
@@ -21,7 +21,7 @@
 
     var options = Object.assign({
         url: config.url,
-        dom_id: '#developer-reference',
+        dom_id: '#openapi-reference',
         presets: [window.SwaggerUIBundle.presets.apis],
         layout: 'BaseLayout',
         validatorUrl: null,

@@ -1,23 +1,23 @@
 <?php
 
-namespace portalium\developer;
+namespace portalium\openapi;
 
-use portalium\developer\components\SpecBuilder;
+use portalium\openapi\components\SpecBuilder;
 use Yii;
 
 /**
  * API reference: an OpenAPI 3.0 document built from the API application's code, shown with Swagger UI.
- * Users with developerWebDefaultIndex see the operations marked public; developerWebDefaultInternal also shows the
+ * Users with openapiWebDefaultIndex see the operations marked public; openapiWebDefaultInternal also shows the
  * internal ones (see README.md).
  *
  * Configuration:
- *   'developer' => ['class' => 'portalium\developer\Module', 'title' => 'NovaVision API']
+ *   'openapi' => ['class' => 'portalium\openapi\Module', 'title' => 'NovaVision API']
  */
 class Module extends \portalium\base\Module
 {
-    public static $tablePrefix = 'developer_';
+    public static $tablePrefix = 'openapi_';
 
-    public static $name = 'developer';
+    public static $name = 'openapi';
 
     public static $description = 'API reference (OpenAPI + Swagger UI)';
 
@@ -37,21 +37,21 @@ class Module extends \portalium\base\Module
     /** @var array<string, string>|null module id => class to document instead of the config files */
     public ?array $modules = null;
 
-    /** @var array extra Swagger UI options merged over the defaults (see assets/swagger/js/developer.js) */
+    /** @var array extra Swagger UI options merged over the defaults (see assets/swagger/js/openapi.js) */
     public array $swagger = [];
 
     private ?SpecBuilder $builder = null;
 
     public static function moduleInit()
     {
-        self::registerTranslation('developer', __DIR__ . '/messages', [
-            'developer' => 'developer.php',
+        self::registerTranslation('openapi', __DIR__ . '/messages', [
+            'openapi' => 'openapi.php',
         ]);
     }
 
     public static function t($message, array $params = [])
     {
-        return parent::coreT('developer', $message, $params);
+        return parent::coreT('openapi', $message, $params);
     }
 
     public function getBuilder(): SpecBuilder
@@ -77,11 +77,11 @@ class Module extends \portalium\base\Module
      */
     public static function canView(): bool
     {
-        return Yii::$app->user->can('developerWebDefaultIndex') || self::canViewInternal();
+        return Yii::$app->user->can('openapiWebDefaultIndex') || self::canViewInternal();
     }
 
     public static function canViewInternal(): bool
     {
-        return Yii::$app->user->can('developerWebDefaultInternal');
+        return Yii::$app->user->can('openapiWebDefaultInternal');
     }
 }

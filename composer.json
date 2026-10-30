@@ -1,5 +1,5 @@
 {
-	"name" : "portalium/yii2-developer",
+	"name" : "portalium/yii2-openapi",
 	"description" : "API reference for Portalium (Yii2): OpenAPI 3.0 built from the API code, shown with Swagger UI",
 	"type" : "portalium-module",
 	"license": "MIT",
@@ -12,7 +12,7 @@
 		}
 	],
 	"support" : {
-		"issues" : "https://github.com/diginova/yii2-developer/issues"
+		"issues" : "https://github.com/portalium/yii2-openapi/issues"
 	},
 	"require" : {
 		"php": ">=8.1",
@@ -21,7 +21,7 @@
 	},
 	"autoload" : {
 		"psr-4" : {
-			"portalium\\developer\\" : "src/"
+			"portalium\\openapi\\" : "src/"
 		}
 	}
 }

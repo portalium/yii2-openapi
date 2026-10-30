@@ -1,4 +1,4 @@
-.developer-bar {
+.openapi-bar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -9,7 +9,7 @@
     font-size: 14px;
 }
 
-.developer-frame {
+.openapi-frame {
     display: block;
     width: 100%;
     height: calc(100vh - 170px);

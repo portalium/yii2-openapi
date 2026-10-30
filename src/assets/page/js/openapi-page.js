@@ -5,7 +5,7 @@
 (function () {
     'use strict';
 
-    var frame = document.querySelector('.developer-frame');
+    var frame = document.querySelector('.openapi-frame');
     if (!frame || !window.MutationObserver) {
         return;
     }

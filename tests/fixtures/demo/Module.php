@@ -1,6 +1,6 @@
 <?php
 
-namespace portalium\developer\tests\fixtures\demo;
+namespace portalium\openapi\tests\fixtures\demo;
 
 /**
  * Test module: "item" is reached through a rule, "plain" only through the default route.

@@ -1,8 +1,8 @@
 <?php
 
-namespace portalium\developer\tests\fixtures\demo\controllers\api;
+namespace portalium\openapi\tests\fixtures\demo\controllers\api;
 
-use portalium\developer\attributes as Doc;
+use portalium\openapi\attributes as Doc;
 use yii\rest\Controller;
 
 /**

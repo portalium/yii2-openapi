@@ -1,6 +1,6 @@
 <?php
 
-namespace portalium\developer\tests\fixtures\demo\models;
+namespace portalium\openapi\tests\fixtures\demo\models;
 
 use yii\base\Model;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace portalium\developer\tests\components;
+namespace portalium\openapi\tests\components;
 
-use portalium\developer\components\SchemaFactory;
+use portalium\openapi\components\SchemaFactory;
 use tests\support\TestCase;
 
 class SchemaFactoryTest extends TestCase

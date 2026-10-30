@@ -1,8 +1,8 @@
 <?php
 
-namespace portalium\developer\tests\fixtures\demo\controllers\api;
+namespace portalium\openapi\tests\fixtures\demo\controllers\api;
 
-use portalium\developer\attributes as Doc;
+use portalium\openapi\attributes as Doc;
 use portalium\rest\ActiveController;
 
 #[Doc\Tag('Items', 'Demo items.')]
@@ -10,7 +10,7 @@ use portalium\rest\ActiveController;
 #[Doc\Operation(action: 'view', summary: 'View an item')]
 class ItemController extends ActiveController
 {
-    public $modelClass = 'portalium\developer\tests\fixtures\demo\models\DemoItem';
+    public $modelClass = 'portalium\openapi\tests\fixtures\demo\models\DemoItem';
 
     public function actions()
     {

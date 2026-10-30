@@ -1,25 +1,25 @@
 <?php
 
-namespace portalium\developer\bundles;
+namespace portalium\openapi\bundles;
 
 use yii\web\AssetBundle;
 
 /**
  * The reference page inside the application layout: the bar and the frame that holds Swagger UI (see SwaggerAsset).
  */
-class DeveloperAsset extends AssetBundle
+class OpenApiAsset extends AssetBundle
 {
-    public $sourcePath = '@vendor/portalium/yii2-developer/src/assets/page';
+    public $sourcePath = '@vendor/portalium/yii2-openapi/src/assets/page';
 
     public $depends = [
         'portalium\theme\bundles\AppAsset',
     ];
 
     public $css = [
-        'css/developer.css',
+        'css/openapi.css',
     ];
 
     public $js = [
-        'js/developer-page.js',
+        'js/openapi-page.js',
     ];
 }

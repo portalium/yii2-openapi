@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m261030_000001_developer_rbac extends Migration
+class m261030_000001_openapi_rbac extends Migration
 {
     public function up()
     {
@@ -11,14 +11,14 @@ class m261030_000001_developer_rbac extends Migration
         $admin = (isset($role) && $role != '') ? $auth->getRole($role) : $auth->getRole('admin');
         $user = $auth->getRole('user');
         $permissionNames = [
-            'developerWebDefaultIndex' => true,
-            'developerWebDefaultInternal' => false,
+            'openapiWebDefaultIndex' => true,
+            'openapiWebDefaultInternal' => false,
         ];
         foreach ($permissionNames as $permissionName => $forUsers) {
             $permission = $auth->getPermission($permissionName);
             if ($permission === null) {
                 $permission = $auth->createPermission($permissionName);
-                $permission->description = ucfirst(str_replace('developer', '', $permissionName));
+                $permission->description = ucfirst(str_replace('openapi', '', $permissionName));
                 $auth->add($permission);
             }
             if (!$auth->hasChild($admin, $permission)) {
@@ -33,7 +33,7 @@ class m261030_000001_developer_rbac extends Migration
     public function down()
     {
         $auth = Yii::$app->authManager;
-        foreach (['developerWebDefaultIndex', 'developerWebDefaultInternal'] as $permissionName) {
+        foreach (['openapiWebDefaultIndex', 'openapiWebDefaultInternal'] as $permissionName) {
             $permission = $auth->getPermission($permissionName);
             if ($permission !== null) {
                 $auth->remove($permission);

@@ -1,7 +1,7 @@
-# portalium/yii2-developer
+# portalium/yii2-openapi
 
 API reference for a Portalium (Yii2) project. It builds an **OpenAPI 3.0.3** document from the API application's
-code on request and shows it with [Swagger UI](https://github.com/swagger-api/swagger-ui) at `/developer/default/index`.
+code on request and shows it with [Swagger UI](https://github.com/swagger-api/swagger-ui) at `/openapi/default/index`.
 
 - The document comes from the code itself: every server shows its own API, and nothing is generated at build time.
 - No runtime dependency: Swagger UI is bundled (`src/assets/swagger/vendor`), and the attributes are plain PHP classes.
@@ -22,20 +22,20 @@ Then:
 
 1. `web/config/main.php` → `'modules'`:
    ```php
-   'developer' => ['class' => 'portalium\developer\Module', 'title' => 'My API'],
+   'openapi' => ['class' => 'portalium\openapi\Module', 'title' => 'My API'],
    ```
    Keep the module id from starting with `api`: a typical root `.htaccess` sends every `/api…` URL to the API
    application (`RewriteCond %{REQUEST_URI} ^/(api)`).
 2. Migrations (permissions, then the top menu item):
    ```bash
-   php portalium migrate --migrationPath=@vendor/portalium/yii2-developer/src/migrations --interactive=0
-   php portalium migrate --migrationPath=@vendor/portalium/yii2-developer/src/migrations/menu --interactive=0
+   php portalium migrate --migrationPath=@vendor/portalium/yii2-openapi/src/migrations --interactive=0
+   php portalium migrate --migrationPath=@vendor/portalium/yii2-openapi/src/migrations/menu --interactive=0
    ```
 
 | Permission | Given to | Sees |
 |---|---|---|
-| `developerWebDefaultIndex` | `admin`, `user` | public operations |
-| `developerWebDefaultInternal` | `admin` | public and internal operations |
+| `openapiWebDefaultIndex` | `admin`, `user` | public operations |
+| `openapiWebDefaultInternal` | `admin` | public and internal operations |
 
 Module options: `title`, `version`, `intro` (Markdown), `serverUrl` (default: current host + `/api`),
 `configFiles` (API config files whose `modules` are documented), `modules` (`id => class`, instead of the config
@@ -57,7 +57,7 @@ For every module of the API application, the controllers in `<module>/controller
 ## Describing operations
 
 ```php
-use portalium\developer\attributes as Doc;
+use portalium\openapi\attributes as Doc;
 
 #[Doc\Tag('Notifications', 'In-app notifications of the signed-in user.')]
 #[Doc\Operation(action: 'index', audience: Doc\Operation::PUBLIC, summary: 'List my notifications')]
@@ -100,13 +100,13 @@ controller and model files, config files) changes.
 Download `swagger-ui-bundle.js`, `swagger-ui.css`, `swagger-ui-bundle.js.LICENSE.txt`, `LICENSE` and `NOTICE` of a
 pinned `swagger-ui-dist` version that is at least two weeks old into `src/assets/swagger/vendor` (LICENSE and NOTICE
 as `swagger-ui-LICENSE` and `swagger-ui-NOTICE`) and update `src/assets/swagger/vendor/VERSION`.
-`src/assets/swagger/js/developer.js` turns off the validator badge (`validatorUrl: null`, otherwise the document URL
+`src/assets/swagger/js/openapi.js` turns off the validator badge (`validatorUrl: null`, otherwise the document URL
 is sent to validator.swagger.io) and URL overrides from the address bar (`queryConfigEnabled: false`).
 
 ## Tests
 
 ```bash
-docker exec -w /app/visu yii2-php vendor/bin/phpunit vendor/portalium/yii2-developer/tests
+docker exec -w /app/visu yii2-php vendor/bin/phpunit vendor/portalium/yii2-openapi/tests
 ```
 
 `tests/data/openapi-3.0-schema.json` is the official OpenAPI 3.0 schema (2021-09-28); the tests validate the

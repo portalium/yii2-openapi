@@ -1,0 +1,20 @@
+.openapi-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: var(--bs-secondary-color);
+    font-size: 14px;
+}
+
+.openapi-frame {
+    display: block;
+    width: 100%;
+    height: calc(100vh - 170px);
+    min-height: 480px;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 6px;
+    background: var(--bs-body-bg);
+}

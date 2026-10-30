@@ -1,76 +1,113 @@
-<p align="center">
-    <a href="https://github.com/portalium" target="_blank">
-        <img src="./portalium_logo.png" height="100px">
-    </a>
-    <h1 align="center">Portalium _____</h1>
-    <br>
-</p>
+# portalium/yii2-openapi
 
-[![Latest Stable Version](https://poser.pugx.org/portalium/_____/v/stable.png)](https://packagist.org/packages/portalium/_____)
-[![Total Downloads](https://poser.pugx.org/portalium/_____/downloads.png)](https://packagist.org/packages/portalium/_____)
-[![Build status](https://github.com/portalium/_____/workflows/build/badge.svg)](https://github.com/portalium/_____/actions?query=workflow%3Abuild)
+API reference for a Portalium (Yii2) project. It builds an **OpenAPI 3.0.3** document from the API application's
+code on request and shows it with [Swagger UI](https://github.com/swagger-api/swagger-ui) at `/openapi/default/index`.
 
-The package ...
-
-## Requirements
-
-- PHP 8.1 or higher.
+- The document comes from the code itself: every server shows its own API, and nothing is generated at build time.
+- No runtime dependency: Swagger UI is bundled (`src/assets/swagger/vendor`), and the attributes are plain PHP classes.
+- Swagger UI runs on a page of its own (`frame`) shown in an iframe, so the application's Bootstrap styles cannot
+  change its layout. The frame follows the application's `data-bs-theme` (light/dark, `html.dark-mode`).
+- Operations are **internal unless marked public**. Customers see only public operations; internal ones, and the
+  schemas only they use, are removed on the server (also from the downloaded JSON).
 
 ## Installation
 
-The package could be installed with composer:
+Projects whose `vendor/` is copied rather than managed by composer:
 
-```shell
-composer require portalium/_____
+```bash
+bash bin/install.sh <project-root>
 ```
 
-## General usage
+Then:
 
-### Widgets:
+1. `web/config/main.php` → `'modules'`:
+   ```php
+   'openapi' => ['class' => 'portalium\openapi\Module', 'title' => 'My API'],
+   ```
+   Keep the module id from starting with `api`: a typical root `.htaccess` sends every `/api…` URL to the API
+   application (`RewriteCond %{REQUEST_URI} ^/(api)`).
+2. Migrations (permissions, then the top menu item):
+   ```bash
+   php portalium migrate --migrationPath=@vendor/portalium/yii2-openapi/src/migrations --interactive=0
+   php portalium migrate --migrationPath=@vendor/portalium/yii2-openapi/src/migrations/menu --interactive=0
+   ```
 
-- [Example Widget](docs/widgets/widget.md)
-- [_____](docs/widgets/_____.md)
-- [_____](docs/widgets/_____.md)
+| Permission | Given to | Sees |
+|---|---|---|
+| `openapiWebDefaultIndex` | `admin`, `user` | public operations |
+| `openapiWebDefaultInternal` | `admin` | public and internal operations |
 
-### Components
+Module options: `title`, `version`, `intro` (Markdown), `serverUrl` (default: current host + `/api`),
+`configFiles` (API config files whose `modules` are documented), `modules` (`id => class`, instead of the config
+files), `swagger` (extra Swagger UI options).
 
-- [Example Component](docs/components/component.md)
-- [_____](docs/components/_____.md)
-- [_____](docs/components/_____.md)
+## What is read from the code
 
-## Testing
+For every module of the API application, the controllers in `<module>/controllers/api`:
 
-### Unit testing
+- URLs from the module's `apiRules` (`yii\rest\UrlRule`: `pluralize`, `prefix`, `patterns`, `extraPatterns`,
+  `only`/`except`), intersected with the controller's `verbs()`. Actions no rule covers are documented on the
+  default route `module/controller/action`.
+- `yii\rest\ActiveController` actions: list (pagination headers, `page`, `per-page`, `sort`, `filter` when
+  `dataFilter` is set, `fields`, `expand`), view, create (201), update, delete (204); the model schema comes from
+  the table columns and `fields()`, the request body from the safe attributes and validation rules.
+- Action method arguments become query parameters; the first paragraph of the method's PHPDoc is the description.
+- Authentication from the `authenticator` behavior (`only`, `except`, `optional`; bearer and `access-token`).
 
-The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
+## Describing operations
 
-```shell
-./vendor/bin/phpunit
+```php
+use portalium\openapi\attributes as Doc;
+
+#[Doc\Tag('Notifications', 'In-app notifications of the signed-in user.')]
+#[Doc\Operation(action: 'index', audience: Doc\Operation::PUBLIC, summary: 'List my notifications')]
+#[Doc\Body(action: 'update', fields: ['status' => ['type' => 'integer', 'enum' => [0, 1]]], required: ['status'])]
+class DefaultController extends ActiveController
+{
+    #[Doc\Operation(audience: Doc\Operation::PUBLIC, summary: 'Send to many users')]
+    #[Doc\Body(NotificationForm::class)]                 // schema from the form's rules
+    #[Doc\Response(200, 'Created.', fields: ['count' => 'integer - Users notified'])]
+    #[Doc\Response(422, ref: 'ValidationErrors')]
+    #[Doc\Permission('notificationApiDefaultSendAll', note: 'notificationType all')]
+    public function actionSend() {}
+}
 ```
 
-### Dependencies
+On the class, an attribute applies to the actions in `action:` (or to every action when it is omitted); on a method,
+to that action. Method values win.
 
-Use [ComposerRequireChecker](https://github.com/maglnet/ComposerRequireChecker) to detect transitive 
-[Composer](https://getcomposer.org/) dependencies.
+| Attribute | Use |
+|---|---|
+| `Operation` | `summary`, `description`, `audience` (`PUBLIC`/`INTERNAL`), `auth` (override), `method` (for default routes without `verbs()`), `deprecated` |
+| `Tag` | sidebar group of the controller |
+| `Body` | `model` (form/model class), `fields` + `required`, `exclude`, `scenario`, `partial` |
+| `Response` | `code`, `description`, `model`, `fields`, `list`, `ref` (`Error`, `ValidationErrors`) |
+| `Param` | extra query/path/header parameter |
+| `Permission` | permission(s) the action checks; shown in the description and `x-permissions` |
+| `Hidden` | leave the action (or controller) out for everyone |
 
-## Package development
+Shorthand types: `string`, `integer`, `number`, `boolean`, `object`, `array`; `?` nullable (`string?`), `[]` list
+(`integer[]`), `string:email` format, `enum:a,b,c`, ` - text` description. A nested array of fields is an object; an
+array with `type`/`$ref`/`enum`/`items` is used as a schema as is.
 
-Once you have created your package, you can create the components, controllers, models, database migrations, and views within the package.
+## Cache
 
-Here are some links with more information about components, controllers, models, database migrations, and views:
+The document is cached per audience in the `cache` component and rebuilt when any file it was built from (module,
+controller and model files, config files) changes.
 
-- [Creating a component](https://www.yiiframework.com/doc/guide/2.0/en/concept-components)
-- [Creating a controller](https://www.yiiframework.com/doc/guide/2.0/en/structure-controllers)
-- [Creating a model](https://www.yiiframework.com/doc/guide/2.0/en/structure-models)
-- [Creating a database migration](https://www.yiiframework.com/doc/guide/2.0/en/db-migrations)
-- [Creating a view](https://www.yiiframework.com/doc/guide/2.0/en/structure-views)
+## Updating Swagger UI
 
-## License
+Download `swagger-ui-bundle.js`, `swagger-ui.css`, `swagger-ui-bundle.js.LICENSE.txt`, `LICENSE` and `NOTICE` of a
+pinned `swagger-ui-dist` version that is at least two weeks old into `src/assets/swagger/vendor` (LICENSE and NOTICE
+as `swagger-ui-LICENSE` and `swagger-ui-NOTICE`) and update `src/assets/swagger/vendor/VERSION`.
+`src/assets/swagger/js/openapi.js` turns off the validator badge (`validatorUrl: null`, otherwise the document URL
+is sent to validator.swagger.io) and URL overrides from the address bar (`queryConfigEnabled: false`).
 
-The Portalium _____ is free software. It is released under the terms of the BSD License.
-Please see [`LICENSE`](./LICENSE.md) for more information.
+## Tests
 
-Maintained by [Portalium Software](https://www.yiiframework.com/).
+```bash
+docker exec -w /app/visu yii2-php vendor/bin/phpunit vendor/portalium/yii2-openapi/tests
+```
 
-## Follow updates
-[![Linkedin](https://img.shields.io/badge/linkedin-join-1DA1F2?style=flat&logo=linkedin)](https://www.linkedin.com/company/diginova-informatics/)
+`tests/data/openapi-3.0-schema.json` is the official OpenAPI 3.0 schema (2021-09-28); the tests validate the
+generated documents against it.

@@ -74,6 +74,26 @@ class DefaultControllerTest extends AppTestCase
         $this->assertStringNotContainsString('bootstrap', $html);
     }
 
+    public function testWidgetsThatModulesAddToEveryPageStayOutOfTheFrame(): void
+    {
+        $ids = F::tenants();
+        $this->loginAs($ids['ali']);
+        $inject = function () {
+            echo '<div id="injected-widget"></div>';
+        };
+        \yii\base\Event::on(\yii\web\View::class, \yii\web\View::EVENT_BEGIN_BODY, $inject);
+        \yii\base\Event::on(\yii\web\View::class, \yii\web\View::EVENT_END_BODY, $inject);
+        try {
+            $html = $this->controller()->actionFrame();
+        } finally {
+            \yii\base\Event::off(\yii\web\View::class, \yii\web\View::EVENT_BEGIN_BODY, $inject);
+            \yii\base\Event::off(\yii\web\View::class, \yii\web\View::EVENT_END_BODY, $inject);
+        }
+
+        $this->assertStringNotContainsString('injected-widget', $html, 'assistant, feedback and tour widgets must not render inside the frame');
+        $this->assertStringContainsString('swagger-ui-bundle.js', $html);
+    }
+
     public function testDownloadIsSentAsAFile(): void
     {
         $ids = F::tenants();

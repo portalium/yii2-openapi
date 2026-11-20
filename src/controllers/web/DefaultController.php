@@ -3,6 +3,7 @@
 namespace portalium\openapi\controllers\web;
 
 use portalium\openapi\Module;
+use portalium\openapi\web\FrameView;
 use portalium\web\Controller;
 use Yii;
 use yii\web\ForbiddenHttpException;
@@ -21,11 +22,13 @@ class DefaultController extends Controller
 
     /**
      * Swagger UI on a page of its own (shown in a frame on index): the application's CSS is not loaded here, so
-     * Bootstrap's global and utility styles cannot change its layout.
+     * Bootstrap's global and utility styles cannot change its layout, and FrameView keeps the widgets that modules
+     * add to every page out of it.
      */
     public function actionFrame()
     {
         $this->requireViewer();
+        $this->setView(new FrameView());
 
         return $this->renderPartial('frame');
     }
